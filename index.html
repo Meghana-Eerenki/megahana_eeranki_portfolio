@@ -1,484 +1,343 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meghana Eeranki | Backend Engineer</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Apply Inter font family */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom scrollbar (optional, but looks good in dark mode) */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #111827; /* bg-gray-900 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #06b6d4; /* cyan-600 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #0891b2; /* cyan-700 */
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Meghana Eeranki — Backend & Cloud Engineer</title>
+  <meta name="description" content="Meghana Eeranki — backend engineer. Portfolio showcasing backend, cloud, monitoring and reliability projects with FastAPI, Celery, Prometheus & AWS." />
 
-        /* NEW: Base transitions for interactive elements */
-        a, button, [class*="hover:"] {
-            transition-property: all;
-            transition-duration: 300ms;
-            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        /* NEW: Styles for scroll-in animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1), transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .reveal-delay-1 { transition-delay: 150ms; }
-        .reveal-delay-2 { transition-delay: 300ms; }
-        .reveal-delay-3 { transition-delay: 450ms; }
+  <style>
+    :root { --accent: #06b6d4; --muted: #94a3b8; }
+    html,body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
+    body { background: #0b1220; color: #e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden; }
 
-        .reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    /* KEEP her cyan–purple floating blobs aesthetic (customized, non-identical) */
+    .liquid-bg {
+      position: fixed; inset: 0; z-index:-10; pointer-events:none; overflow:hidden;
+    }
+    .blob {
+      position:absolute; border-radius:9999px; filter: blur(72px); opacity:0.9; transform-origin:center;
+      animation: floaty 30s ease-in-out infinite;
+    }
+    .blob.b1 { width:340px; height:340px; left:-80px; top:-80px; background:linear-gradient(135deg,#06b6d4aa,#8b5cf6aa); animation-duration:34s; }
+    .blob.b2 { width:260px; height:260px; right:-120px; bottom:-100px; background:linear-gradient(135deg,#8b5cf6cc,#06b6d499); animation-duration:38s; animation-delay:3s; }
+    .blob.b3 { width:180px; height:180px; right:12%; top:6%; background:linear-gradient(135deg,#06b6d444,#a78bfa44); animation-duration:28s; animation-delay:6s; }
 
-        /* NEW: Active nav link style */
-        .nav-active {
-            color: #06b6d4; /* cyan-600 */
-            font-weight: 600;
-        }
+    @keyframes floaty {
+      0% { transform: translateY(0) scale(1); }
+      25% { transform: translateY(-18px) scale(1.06); }
+      50% { transform: translateY(10px) scale(0.96); }
+      75% { transform: translateY(-8px) scale(1.03); }
+      100% { transform: translateY(0) scale(1); }
+    }
 
-        /* NEW: Keyframes for liquid blob animations */
-        @keyframes blob-move-1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(100px, -50px) scale(1.1); }
-            50% { transform: translate(50px, 100px) scale(0.9); }
-            75% { transform: translate(-100px, -50px) scale(1.2); }
-        }
-        @keyframes blob-move-2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(-80px, 60px) scale(1.2); }
-            50% { transform: translate(100px, -100px) scale(0.8); }
-            75% { transform: translate(50px, 50px) scale(1.1); }
-        }
+    /* Reveal animations */
+    .reveal { opacity:0; transform: translateY(18px); transition: all 700ms cubic-bezier(.2,.9,.2,1); }
+    .reveal.visible { opacity:1; transform: none; }
 
-        .animate-blob-1 {
-            animation: blob-move-1 30s linear infinite;
-        }
-        .animate-blob-2 {
-            animation: blob-move-2 35s linear infinite alternate;
-        }
+    /* nav active */
+    .nav-active { color: var(--accent); font-weight:600; }
 
-        /* NEW: Keyframes for glowing dot */
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 6px #06b6d4, 0 0 10px #06b6d4;
-                background-color: #06b6d4;
-            }
-            50% {
-                box-shadow: 0 0 10px #0891b2, 0 0 20px #0891b2, 0 0 30px #0891b2;
-                background-color: #0891b2;
-            }
-        }
+    /* small helpers */
+    .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.04); }
+    .tech-pill { background: rgba(6,182,212,0.08); color: var(--accent); padding: 6px 10px; border-radius:999px; font-size:0.75rem; font-weight:600; }
+    .skill-pill { background: rgba(255,255,255,0.03); color: #cbd5e1; padding:8px 12px; border-radius:10px; font-size:0.875rem; }
 
-        /* NEW: Classes for timeline dots */
-        .timeline-dot {
-            @apply absolute left-0 md:left-1/2 w-4 h-4 rounded-full bg-gray-600 border-4 border-gray-800;
-            transform: translateX(-50%);
-        }
-        
-        .timeline-dot-glowing {
-            @apply absolute left-0 md:left-1/2 w-4 h-4 rounded-full border-4 border-gray-800;
-            transform: translateX(-50%);
-            animation: glow 2s ease-in-out infinite;
-        }
-    </style>
+    @media (max-width:640px) {
+      .blob.b1 { left:-140px; top:-120px; }
+      .blob.b2 { right:-80px; bottom:-80px; }
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-gray-200 font-inter antialiased overflow-x-hidden">
+<body>
 
-    <!-- NEW: Liquid Background -->
-    <div class="fixed left-0 top-0 -z-10 h-full w-full">
-        <div class="relative h-full w-full">
-            <div class="absolute -top-40 -left-40 h-[300px] w-[300px] rounded-full bg-cyan-600/30 blur-[100px] filter animate-blob-1"></div>
-            <div class="absolute -bottom-40 -right-40 h-[300px] w-[300px] rounded-full bg-purple-600/30 blur-[100px] filter animate-blob-2"></div>
-            <div class="absolute -top-20 right-20 h-[200px] w-[200px] rounded-full bg-cyan-600/20 blur-[80px] filter animate-blob-2" style="animation-delay: 5s;"></div>
-        </div>
+  <!-- Floating blobs background (Meghana's colors preserved) -->
+  <div class="liquid-bg" aria-hidden="true">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+
+  <!-- Header -->
+  <header id="site-header" class="sticky top-0 z-40 glass">
+    <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#home" class="text-lg md:text-xl font-semibold text-white">Meghana Eeranki</a>
+
+      <div class="hidden md:flex items-center gap-6">
+        <a class="nav-link text-sm text-slate-300 hover:text-white" href="#about">About</a>
+        <a class="nav-link text-sm text-slate-300 hover:text-white" href="#experience">Experience</a>
+        <a class="nav-link text-sm text-slate-300 hover:text-white" href="#projects">Projects</a>
+        <a class="nav-link text-sm text-slate-300 hover:text-white" href="#skills">Skills</a>
+        <a class="nav-link text-sm text-slate-300 hover:text-white" href="#contact">Contact</a>
+        <a href="meghana_resume.pdf" download class="ml-2 text-sm bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-2 rounded-md shadow-sm">Download Resume</a>
+      </div>
+
+      <!-- Mobile -->
+      <div class="md:hidden">
+        <button id="mobile-toggle" aria-label="Toggle menu" class="p-2 rounded-md text-slate-200 glass">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-white/5">
+      <div class="px-6 py-4 space-y-2">
+        <a href="#about" class="block text-slate-200">About</a>
+        <a href="#experience" class="block text-slate-200">Experience</a>
+        <a href="#projects" class="block text-slate-200">Projects</a>
+        <a href="#skills" class="block text-slate-200">Skills</a>
+        <a href="#contact" class="block text-slate-200">Contact</a>
+        <a href="meghana_resume.pdf" download class="inline-block mt-2 bg-cyan-600 text-white px-4 py-2 rounded-md">Download Resume</a>
+      </div>
     </div>
+  </header>
 
+  <main class="container mx-auto px-6 pt-8">
 
-    <!-- Header / Navigation -->
-    <header class="sticky top-0 z-50 w-full bg-white/10 backdrop-blur-lg border-b border-white/20">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="#" class="text-2xl font-bold text-white">
-                    Meghana Eeranki
-                </a>
-                <div class="hidden md:flex space-x-6 items-center">
-                    <a href="#about" class="nav-link text-gray-300 hover:text-cyan-400">About</a>
-                    <a href="#experience" class="nav-link text-gray-300 hover:text-cyan-400">Experience</a>
-                    <a href="#projects" class="nav-link text-gray-300 hover:text-cyan-400">Projects</a>
-                    <a href="#skills" class="nav-link text-gray-300 hover:text-cyan-400">Skills</a>
-                    <a href="#contact" class="nav-link bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-md">
-                        Contact
-                    </a>
-                </div>
-                <!-- Mobile Menu Button (Basic, can be expanded with JS) -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-300 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                    </button>
-                </div>
-            </div>
-             <!-- NEW: Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden">
-                <a href="#about" class="block py-2 px-6 text-sm hover:text-cyan-400">About</a>
-                <a href="#experience" class="block py-2 px-6 text-sm hover:text-cyan-400">Experience</a>
-                <a href="#projects" class="block py-2 px-6 text-sm hover:text-cyan-400">Projects</a>
-                <a href="#skills" class="block py-2 px-6 text-sm hover:text-cyan-400">Skills</a>
-                <a href="#contact" class="block py-2 px-6 text-sm hover:text-cyan-400">Contact</a>
-            </div>
-        </nav>
-    </header>
+    <!-- HERO / HOME -->
+    <section id="home" class="min-h-[70vh] flex items-center">
+      <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white reveal">Meghana Eeranki</h1>
+        <p class="mt-4 text-cyan-300 font-semibold text-lg md:text-xl reveal">Backend & Cloud Engineer</p>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="about" class="min-h-screen flex items-center justify-center text-center px-6 py-20">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 reveal">
-                    Meghana Eeranki
-                </h1>
-                <h2 class="text-2xl md:text-3xl font-semibold text-cyan-400 mb-6 reveal reveal-delay-1">
-                    Backend & Cloud Engineer
-                </h2>
-                <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-8 reveal reveal-delay-2">
-                    Final-year Computer Science (AI/ML) undergraduate passionate about backend systems and cloud automation. Skilled in developing scalable microservices, containerized deployments, and CI/CD pipelines. Focused on building reliable, fault-tolerant applications that deliver high availability and low latency.
-                </p>
-                <div class="flex items-center justify-center space-x-6 reveal reveal-delay-3">
-                    <a href="mailto:meghanaeeranki@gmail.com" class="text-gray-400 hover:text-cyan-400 transition-colors" title="Email">
-                        <!-- Email Icon -->
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors" title="LinkedIn">
-                        <!-- LinkedIn Icon -->
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors" title="GitHub">
-                        <!-- GitHub Icon -->
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.109-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
-                    </a>
-                </div>
-            </div>
-        </section>
+        <p class="mt-6 text-slate-300 max-w-2xl mx-auto text-base md:text-lg reveal">
+          Final-year Computer Science (AI/ML) undergraduate focused on building reliable, low-latency backend systems.
+          I design scalable microservices, ship containerized apps, and implement observability-driven reliability.
+        </p>
 
-        <!-- Experience Section -->
-        <section id="experience" class="py-20 px-6 reveal">
-            <div class="container mx-auto max-w-4xl">
-                <h2 class="text-4xl font-bold text-center text-white mb-12">
-                    Professional Experience
-                </h2>
-                <div class="relative">
-                    <!-- Vertical line -->
-                    <div class="absolute left-0 md:left-1/2 top-0 h-full w-0.5 bg-gray-700" style="transform: translateX(-50%)"></div>
-                    
-                    <!-- Item 1: Prodigal AI -->
-                    <div class="mb-12 flex flex-col md:flex-row items-center reveal relative">
-                        <!-- The Dot -->
-                        <div class="timeline-dot-glowing" style="top: 24px;"></div>
-                        
-                        <div class="md:w-1/2 md:pr-8">
-                            <div class="p-6 bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg hover:shadow-cyan-900/50 hover:-translate-y-2">
-                                <span class="text-sm font-semibold text-cyan-400">Mar 2025 – Oct 2025</span>
-                                <h3 class="text-2xl font-bold text-white mt-2 mb-2">Software Engineering Intern</h3>
-                                <p class="text-lg text-gray-400 mb-4">Prodigal AI Technologies Pvt. Ltd., Delhi</p>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                    <li>Co-developed and deployed 6 containerized microservices (FastAPI, Docker).</li>
-                                    <li>Engineered a robust CI/CD quality gate using Pytest, increasing code coverage from 42% to 89%.</li>
-                                    <li>Optimized SQL query logic and indexing, improving response latency by 27%.</li>
-                                    <li>Designed an SQL-triggered Slack alert system, cutting incident detection time to <60s.</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="md:w-1/2 md:pl-8 md:text-left text-center mt-4 md:mt-0"></div>
-                    </div>
-
-                    <!-- Item 2: JNTUH -->
-                    <div class="mb-12 flex flex-col md:flex-row items-center reveal relative">
-                        <!-- The Dot -->
-                        <div class="timeline-dot" style="top: 24px;"></div>
-
-                        <div class="md:w-1/2 md:pr-8 md:text-right text-center mt-4 md:mt-0 order-2 md:order-1"></div>
-                        <div class="md:w-1/2 md:pl-8 order-1 md:order-2">
-                             <div class="p-6 bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg hover:shadow-cyan-900/50 hover:-translate-y-2">
-                                <span class="text-sm font-semibold text-cyan-400">Feb 2024 – May 2024</span>
-                                <h3 class="text-2xl font-bold text-white mt-2 mb-2">Project Contributor</h3>
-                                <p class="text-lg text-gray-400 mb-4">Autonomous Vehicle Data Pipeline, JNTUH</p>
-                                <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                    <li>Built a Python–SQL data pipeline processing 1.2M+ telemetry logs for analysis.</li>
-                                    <li>Automated ETL workflows, boosting preprocessing speed by 48%.</li>
-                                    <li>Improved anomaly detection precision by 11% via optimized aggregation.</li>
-                                    <li>Created analytical dashboards, accelerating insight generation by 45%.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="py-20 px-6 reveal">
-            <div class="container mx-auto max-w-5xl">
-                <h2 class="text-4xl font-bold text-center text-white mb-12">
-                    Featured Projects
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    
-                    <!-- Project 1: Resilient Task Queue -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg p-6 flex flex-col justify-between hover:-translate-y-2 reveal">
-                        <div>
-                            <h3 class="text-2xl font-bold text-white mb-3">Resilient Task Queue and Scheduler</h3>
-                            <p class="text-gray-300 mb-4">
-                                Designed a distributed task-processing system to handle high-volume background jobs using FastAPI, Celery, Redis, and RabbitMQ.
-                            </p>
-                            <ul class="list-disc list-inside text-gray-300 mb-4 text-sm">
-                                <li>Implemented auto-retry policies, reducing job failure rate by 42%.</li>
-                                <li>Scaled to process >150 RPS while maintaining <150ms latency.</li>
-                                <li>Built an admin dashboard for task metrics with Grafana & Prometheus.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="tech-pill">FastAPI</span>
-                                <span class="tech-pill">Celery</span>
-                                <span class="tech-pill">RabbitMQ</span>
-                                <span class="tech-pill">Redis</span>
-                                <span class="tech-pill">Prometheus</span>
-                            </div>
-                            <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium inline-flex items-center">
-                                View on GitHub
-                                <!-- External Link Icon -->
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Project 2: Auto-Recovery System -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-lg p-6 flex flex-col justify-between hover:-translate-y-2 reveal reveal-delay-1">
-                        <div>
-                            <h3 class="text-2xl font-bold text-white mb-3">Resource Monitoring & Auto-Recovery</h3>
-                            <p class="text-gray-300 mb-4">
-                                Developed a real-time system health monitoring framework using Prometheus, AWS EC2, and Python to detect and restart failed containers automatically.
-                            </p>
-                            <ul class="list-disc list-inside text-gray-300 mb-4 text-sm">
-                                <li>Reduced downtime by 44% with automated container restarts.</li>
-                                <li>Implemented anomaly detection based on CPU/memory thresholds.</li>
-                                <li>Integrated CI/CD workflows for blue-green deployments.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="tech-pill">Python</span>
-                                <span class="tech-pill">Prometheus</span>
-                                <span class="tech-pill">AWS EC2</span>
-                                <span class="tech-pill">Docker</span>
-                                <span class="tech-pill">CloudWatch</span>
-                            </div>
-                            <a href="#" class="text-cyan-400 hover:text-cyan-300 font-medium inline-flex items-center">
-                                View on GitHub
-                                <!-- External Link Icon -->
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        
-        <!-- Custom CSS for tech pills -->
-        <style>
-            .tech-pill {
-                @apply bg-cyan-900/50 text-cyan-300 px-3 py-1 rounded-full text-xs font-medium;
-            }
-        </style>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-20 px-6 reveal">
-            <div class="container mx-auto max-w-6xl">
-                <h2 class="text-4xl font-bold text-center text-white mb-12">
-                    Technical Skills
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    
-                    <!-- Languages -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-lg hover:-translate-y-2 reveal">
-                        <h3 class="text-xl font-semibold text-cyan-400 mb-4">Programming Languages</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">Python</span>
-                            <span class="skill-pill">Java</span>
-                            <span class="skill-pill">C/C++</span>
-                        </div>
-                    </div>
-
-                    <!-- Backend & Systems -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-lg hover:-translate-y-2 reveal reveal-delay-1">
-                        <h3 class="text-xl font-semibold text-cyan-400 mb-4">Backend & Systems</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">FastAPI</span>
-                            <span class="skill-pill">Microservices</span>
-                            <span class="skill-pill">Redis</span>
-                            <span class="skill-pill">System Design</span>
-                            <span class="skill-pill">Celery</span>
-                            <span class="skill-pill">RabbitMQ</span>
-                        </div>
-                    </div>
-
-                    <!-- Cloud & DevOps -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-lg hover:-translate-y-2 reveal reveal-delay-2">
-                        <h3 class="text-xl font-semibold text-cyan-400 mb-4">Cloud & DevOps</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">Docker</span>
-                            <span class="skill-pill">AWS (Lambda, EC2)</span>
-                            <span class="skill-pill">CI/CD</span>
-                            <span class="skill-pill">GitHub Actions</span>
-                            <span class="skill-pill">Prometheus</span>
-                            <span class="skill-pill">CloudWatch</span>
-                        </div>
-                    </div>
-
-                    <!-- Databases & Tools -->
-                    <div class="bg-white/10 backdrop-blur-lg border border-white/20 p-6 rounded-lg hover:-translate-y-2 reveal reveal-delay-3">
-                        <h3 class="text-xl font-semibold text-cyan-400 mb-4">Databases & Tools</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-pill">PostgreSQL</span>
-                            <span class="skill-pill">SQL</span>
-                            <span class="skill-pill">SQLite</span>
-                            <span class="skill-pill">Git</span>
-                            <span class="skill-pill">Grafana</span>
-                            <span class="skill-pill">Unix/Linux</span>
-                            <span class="skill-pill">Pytest</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-        
-        <!-- Custom CSS for skill pills -->
-        <style>
-            .skill-pill {
-                @apply bg-gray-700 text-gray-200 px-4 py-2 rounded-lg text-sm font-medium;
-            }
-        </style>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-20 px-6 reveal">
-            <div class="container mx-auto max-w-3xl text-center">
-                <h2 class="text-4xl font-bold text-white mb-6">
-                    Get In Touch
-                </h2>
-                <p class="text-lg text-gray-300 leading-relaxed mb-8">
-                    I'm currently seeking new opportunities and am always open to discussing new projects, creative ideas, or ways to collaborate. Feel free to reach out!
-                </p>
-                <a href="mailto:meghanaeeranki@gmail.com" 
-                   class="inline-block bg-cyan-600 hover:bg-cyan-500 text-white text-lg font-medium px-8 py-4 rounded-md transition-colors shadow-lg hover:shadow-cyan-700/50 hover:-translate-y-1">
-                    Say Hello
-                </a>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="py-8 bg-gray-800 border-t border-gray-700">
-        <div class="container mx-auto px-6 text-center text-gray-500">
-            <p>&copy; 2025 Meghana Eeranki. All rights reserved.</p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center reveal">
+          <a href="#projects" class="inline-flex items-center justify-center px-6 py-3 bg-cyan-600 hover:bg-cyan-500 rounded-md text-white font-semibold shadow">View Projects</a>
+          <a href="mailto:meghanaeeranki@gmail.com" class="inline-flex items-center justify-center px-6 py-3 border border-white/6 rounded-md text-slate-100 hover:text-white">Say Hello</a>
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <!-- NEW: JavaScript for interactivity -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // --- Scroll Animation Logic ---
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
+    <!-- ABOUT -->
+    <section id="about" class="py-14 reveal">
+      <div class="max-w-3xl mx-auto glass p-6 rounded-lg">
+        <h2 class="text-2xl font-bold text-white">About</h2>
+        <p class="mt-3 text-slate-300">
+          I enjoy turning complex backend problems into reliable, maintainable systems. My core interests include asynchronous workflows,
+          metrics-driven reliability, and infrastructure automation. I'm finishing a B.Tech in Computer Science (AI/ML) and actively
+          building projects that combine robust engineering with measurable outcomes.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <span class="tech-pill">FastAPI</span>
+          <span class="tech-pill">Docker</span>
+          <span class="tech-pill">Prometheus</span>
+          <span class="tech-pill">Celery</span>
+          <span class="tech-pill">RabbitMQ</span>
+        </div>
+      </div>
+    </section>
 
-            document.querySelectorAll('.reveal').forEach(element => {
-                revealObserver.observe(element);
-            });
 
-            // --- Active Nav Link Logic ---
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('section[id]');
+    <!-- EXPERIENCE (Timeline - fixed alignment + glow) -->
+    <section id="experience" class="py-20 relative">
+    <div class="max-w-5xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-white text-center mb-16 reveal">Experience</h2>
 
-            const navObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionId = entry.target.getAttribute('id');
-                        
-                        // Remove active from all links
-                        navLinks.forEach(link => {
-                            link.classList.remove('nav-active');
-                            // Special case for contact button
-                            if(link.href.includes('#contact')) {
-                                link.classList.remove('bg-cyan-500');
-                                link.classList.add('bg-cyan-600');
-                            }
-                        });
-                        
-                        // Add active to the correct link
-                        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-                        if (activeLink) {
-                            activeLink.classList.add('nav-active');
-                             // Special case for contact button
-                            if(sectionId === 'contact') {
-                                activeLink.classList.remove('bg-cyan-600');
-                                activeLink.classList.add('bg-cyan-500');
-                            }
-                        }
-                    }
-                });
-            }, { 
-                // Activates when the section is in the middle 40% of the viewport
-                rootMargin: '-30% 0px -70% 0px' 
-            });
+        <!-- Central timeline line -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-cyan-500/70 via-purple-500/60 to-transparent"></div>
 
-            sections.forEach(section => {
-                navObserver.observe(section);
-            });
+        <div class="space-y-20 relative">
 
-            // --- NEW: Mobile Menu Toggle Logic ---
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+        <!-- 🔵 Current Experience (glow) -->
+        <div class="flex flex-col md:flex-row md:justify-between items-center relative">
+            <!-- Left side: Date (aligned near center) -->
+            <div class="md:w-5/12 md:text-right text-center mb-6 md:mb-0">
+            <p class="text-sm font-semibold text-cyan-400">Mar 2025 – Oct 2025</p>
+            </div>
 
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            <!-- Center glowing dot -->
+            <div class="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+            <div class="relative flex items-center justify-center">
+                <div class="absolute w-6 h-6 rounded-full bg-cyan-400/40 animate-ping"></div>
+                <div class="relative w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_12px_4px_rgba(6,182,212,0.6)]"></div>
+            </div>
+            </div>
 
-            // Close mobile menu when a link is clicked
-            mobileMenu.addEventListener('click', (e) => {
-                if (e.target.tagName === 'A') {
-                    mobileMenu.classList.add('hidden');
-                }
-            });
+            <!-- Right side: Card -->
+            <div class="md:w-5/12 md:text-left">
+            <div class="glass border border-white/10 rounded-lg p-6 hover:-translate-y-1 transition-all duration-300">
+                <h3 class="text-xl font-bold text-white">Software Engineering Intern</h3>
+                <p class="text-sm text-slate-300 font-medium mb-3">Prodigal AI Technologies Pvt. Ltd. (Part-Time)</p>
+                <ul class="list-disc list-inside text-slate-300 text-sm space-y-2">
+                <li>Deployed 6 containerized microservices (FastAPI, Docker) with <strong>99.5% uptime</strong>.</li>
+                <li>Built CI/CD test pipeline (Pytest), boosting coverage <strong>42% → 89%</strong>.</li>
+                <li>Optimized Redis caching and SQL queries, reducing latency by <strong>27%</strong>.</li>
+                <li>Integrated Slack alerts and Grafana dashboards for <strong>real-time issue detection</strong>.</li>
+                </ul>
+            </div>
+            </div>
+        </div>
+
+        <!-- 🟣 Past Experience (static, text aligned, date unchanged) -->
+        <div class="flex flex-col md:flex-row md:justify-between items-center relative">
+        
+        <!-- Left side: Card (left-aligned text inside) -->
+        <div class="md:w-5/12 order-2 md:order-1">
+            <div class="glass border border-white/10 rounded-lg p-6 hover:-translate-y-1 transition-all duration-300 text-left">
+            <h3 class="text-xl font-bold text-white">Project Contributor</h3>
+            <p class="text-sm text-slate-300 font-medium mb-3">
+                Autonomous Vehicle Data Pipeline — JNTUH
+            </p>
+            <ul class="list-disc list-inside text-slate-300 text-sm space-y-2">
+                <li>Built a Python–SQL data pipeline processing <strong>1.2M+</strong> telemetry logs.</li>
+                <li>Automated ETL workflow, improving preprocessing by <strong>48%</strong>.</li>
+                <li>Enhanced anomaly detection accuracy by <strong>11%</strong>.</li>
+                <li>Developed dashboards, reducing manual analysis by <strong>45%</strong>.</li>
+            </ul>
+            </div>
+        </div>
+
+        <!-- Center static dot -->
+        <div class="absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+            <div class="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_6px_3px_rgba(139,92,246,0.4)]"></div>
+        </div>
+
+        <!-- Right side: Date (kept same position as before) -->
+        <div class="md:w-5/12 md:text-left text-center order-1 md:order-2">
+            <p class="text-sm font-semibold text-purple-400 mt-2 md:mt-0">
+            Feb 2024 – May 2024
+            </p>
+        </div>
+        </div>
+
+    </div>
+    </section>
+
+
+
+    <!-- PROJECTS -->
+    <section id="projects" class="py-14 reveal">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-white text-center mb-8">Featured Projects</h2>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="glass p-6 rounded-lg border border-white/6 hover:shadow-lg transition">
+            <h3 class="text-xl font-semibold text-white">Resilient Task Queue & Scheduler</h3>
+            <p class="mt-2 text-slate-300 text-sm">Distributed task system using FastAPI, Celery, Redis & RabbitMQ for background processing.</p>
+            <ul class="mt-3 list-disc list-inside text-slate-300 text-sm space-y-1">
+              <li>Implemented auto-retry & exponential backoff — reduced job failures by <strong>42%</strong>.</li>
+              <li>Scaled workers to process >150 RPS with <150 ms median latency.</li>
+            </ul>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="tech-pill">FastAPI</span><span class="tech-pill">Celery</span><span class="tech-pill">RabbitMQ</span>
+            </div>
+            <div class="mt-4">
+              <a href="#" class="text-cyan-300 hover:text-cyan-200">View on GitHub →</a>
+            </div>
+          </div>
+
+          <div class="glass p-6 rounded-lg border border-white/6 hover:shadow-lg transition">
+            <h3 class="text-xl font-semibold text-white">Resource Monitoring & Auto-Recovery</h3>
+            <p class="mt-2 text-slate-300 text-sm">Prometheus-driven monitor that auto-restarts failing containers and raises alerts.</p>
+            <ul class="mt-3 list-disc list-inside text-slate-300 text-sm space-y-1">
+              <li>Reduced downtime by <strong>44%</strong> using auto-restart workflows and CloudWatch alarms.</li>
+              <li>Built Grafana dashboards to visualize 20+ system metrics for operators.</li>
+            </ul>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="tech-pill">Prometheus</span><span class="tech-pill">Grafana</span><span class="tech-pill">AWS EC2</span>
+            </div>
+            <div class="mt-4">
+              <a href="#" class="text-cyan-300 hover:text-cyan-200">View on GitHub →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="py-14 reveal">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-white text-center mb-8">Skills</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass p-4 rounded-lg">
+            <h4 class="text-sm font-semibold text-cyan-300 mb-3">Languages</h4>
+            <div class="flex flex-wrap gap-2"><span class="skill-pill">Python</span><span class="skill-pill">Java</span><span class="skill-pill">C/C++</span></div>
+          </div>
+          <div class="glass p-4 rounded-lg">
+            <h4 class="text-sm font-semibold text-cyan-300 mb-3">Backend</h4>
+            <div class="flex flex-wrap gap-2"><span class="skill-pill">FastAPI</span><span class="skill-pill">Celery</span><span class="skill-pill">Redis</span></div>
+          </div>
+          <div class="glass p-4 rounded-lg">
+            <h4 class="text-sm font-semibold text-cyan-300 mb-3">Cloud & DevOps</h4>
+            <div class="flex flex-wrap gap-2"><span class="skill-pill">AWS</span><span class="skill-pill">Docker</span><span class="skill-pill">CI/CD</span></div>
+          </div>
+          <div class="glass p-4 rounded-lg">
+            <h4 class="text-sm font-semibold text-cyan-300 mb-3">Tools</h4>
+            <div class="flex flex-wrap gap-2"><span class="skill-pill">Prometheus</span><span class="skill-pill">Grafana</span><span class="skill-pill">Postgres</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-14 reveal">
+      <div class="max-w-3xl mx-auto text-center glass p-8 rounded-lg">
+        <h2 class="text-2xl md:text-3xl font-bold text-white">Get in touch</h2>
+        <p class="mt-3 text-slate-300">Open to roles in backend, SRE, and cloud infrastructure. Email or connect on LinkedIn & GitHub.</p>
+        <div class="mt-6">
+          <a href="mailto:meghanaeeranki@gmail.com" class="inline-block bg-cyan-600 px-6 py-3 rounded-md text-white font-semibold">Say Hello</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-8 text-center text-slate-400">
+    <div class="container mx-auto px-6">
+      <small>&copy; 2025 Meghana Eeranki — Built with care • Designed for backend engineering roles</small>
+    </div>
+  </footer>
+
+  <!-- Scripts: reveal on scroll, active nav, mobile toggle -->
+  <script>
+    // Mobile menu
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileToggle) {
+      mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    }
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => observer.observe(r));
+
+    // Active nav link
+    const navLinks = document.querySelectorAll('a.nav-link');
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('nav-active', link.getAttribute('href') === '#' + id);
         });
-    </script>
+      });
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    sections.forEach(s => navObserver.observe(s));
 
+    // Header shadow on scroll
+    const header = document.getElementById('site-header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 30) header.classList.add('shadow-xl');
+      else header.classList.remove('shadow-xl');
+    });
+  </script>
 </body>
 </html>
